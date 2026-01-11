@@ -22,7 +22,7 @@ pipeline {
                 dir('demo') {
                     script {
                         try {
-                            bat 'mvn clean compile'  
+                            sh 'mvn clean compile'  
                             
                             echo ' Build réussi'
                         } catch (Exception e) {
@@ -41,7 +41,7 @@ pipeline {
                 dir('demo') {
                     script {
                         try {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             echo ' Tests passés'
                         } catch (Exception e) {
                             echo ' Tests échoués mais on continue'
