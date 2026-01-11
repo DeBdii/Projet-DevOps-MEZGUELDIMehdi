@@ -2,12 +2,11 @@ pipeline {
     agent any
     
     tools {
-        maven 'Maven 3.9.12'  
-        jdk 'jdk17'           
+        maven 'Maven 3.9.12'
+        jdk 'jdk17'
     }
     
     stages {
-        
         stage('Checkout') {
             steps {
                 git branch: 'dev', 
@@ -16,14 +15,12 @@ pipeline {
             }
         }
         
-       
         stage('Build') {
             steps {
                 dir('demo') {
                     script {
                         try {
-                            sh 'mvn clean compile'  
-                            
+                            sh 'mvn clean package'
                             echo ' Build réussi'
                         } catch (Exception e) {
                             echo ' Build échoué: ' + e.toString()
@@ -35,14 +32,13 @@ pipeline {
             }
         }
         
-       
         stage('Test') {
             steps {
                 dir('demo') {
                     script {
                         try {
                             sh 'mvn test'
-                            echo ' Tests passés'
+                            echo '✅ Tests passés'
                         } catch (Exception e) {
                             echo ' Tests échoués mais on continue'
                         }
@@ -50,7 +46,6 @@ pipeline {
                 }
             }
         }
-        
         
         stage('Archive') {
             steps {
@@ -61,17 +56,14 @@ pipeline {
             }
         }
         
-        
         stage('Deploy') {
             when {
                 expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
             }
             steps {
                 echo ' Déploiement simulé'
-               
             }
         }
-        
         
         stage('Notify Slack') {
             when {
@@ -79,15 +71,14 @@ pipeline {
             }
             steps {
                 echo ' Notification Slack simulée'
-              
             }
         }
     }
     
     post {
         always {
-            echo "Pipeline ${currentBuild.result} - Build #${env.BUILD_NUMBER}"
-            cleanWs()  
+            echo "📊 Pipeline ${currentBuild.result} - Build #${env.BUILD_NUMBER}"
+            cleanWs()
         }
         success {
             echo ' Pipeline réussi!'
